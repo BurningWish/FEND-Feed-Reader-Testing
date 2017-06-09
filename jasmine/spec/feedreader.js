@@ -26,36 +26,48 @@ $(function() {
         });
 
 
-        /* TODO: Write a test that loops through each feed
+        /* Write a test that loops through each feed
          * in the allFeeds object and ensures it has a URL defined
          * and that the URL is not empty.
          */
 
         it('have each URL defined', function() {
             allFeeds.forEach(function(feed) {
+                // Expect url to be defined
                 expect(feed.url).toBeDefined();
+
+                // Expect url not null
                 expect(feed.url).not.toBe(null);
+
+                // Expect url not empty
+                expect(feed.url.length).not.toBe(0);
             });
         });
 
-        /* TODO: Write a test that loops through each feed
+        /* Write a test that loops through each feed
          * in the allFeeds object and ensures it has a name defined
          * and that the name is not empty.
          */
         it('have each name defined', function() {
             allFeeds.forEach(function(feed) {
+                // Expect name to be defined
                 expect(feed.name).toBeDefined();
+
+                // Expect name not null
                 expect(feed.name).not.toBe(null);
+
+                // Expect name not empty
+                expect(feed.name.length).not.toBe(0);
             });
         });
     });
 
 
-    /* TODO: Write a new test suite named "The menu" */
+    /* Write a new test suite named "The menu" */
     describe('The menu', function() {
 
         var body = $('body');
-        /* TODO: Write a test that ensures the menu element is
+        /* Write a test that ensures the menu element is
          * hidden by default. You'll have to analyze the HTML and
          * the CSS to determine how we're performing the
          * hiding/showing of the menu element.
@@ -64,7 +76,7 @@ $(function() {
             expect(body.hasClass('menu-hidden')).toBe(true);
         });
 
-        /* TODO: Write a test that ensures the menu changes
+        /* Write a test that ensures the menu changes
          * visibility when the menu icon is clicked. This test
          * should have two expectations: does the menu display when
          * clicked and does it hide when clicked again.
@@ -84,16 +96,16 @@ $(function() {
         });
     });
 
-    /* TODO: Write a new test suite named "Initial Entries" */
+    /* Write a new test suite named "Initial Entries" */
     describe('Initial Entries', function() {
-        /* TODO: Write a test that ensures when the loadFeed
+        /* Write a test that ensures when the loadFeed
          * function is called and completes its work, there is at least
          * a single .entry element within the .feed container.
          * Remember, loadFeed() is asynchronous so this test will require
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
 
-        // Make sure that done() is run as a callback of loadFeed(0)
+        // Load initial feed within beforeEach, since it is asynchronous
         beforeEach(function(done) {
             // First clear the feeds
             $('.feed').empty();
@@ -111,9 +123,9 @@ $(function() {
         });
     });
 
-    /* TODO: Write a new test suite named "New Feed Selection" */
+    /* Write a new test suite named "New Feed Selection" */
     describe('New Feed Selection', function() {
-        /* TODO: Write a test that ensures when a new feed is loaded
+        /* Write a test that ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
@@ -125,20 +137,29 @@ $(function() {
             // First clear the feeds
             $('.feed').empty();
 
-            // Then loadFeed(0) and save content to oldFeeds
+            // Then fire off loadFeed(0)
             loadFeed(0, function() {
-                oldFeeds = $('.feed').html();
-            });
 
-            // Then loadFeed(1) and save content to newFeeds
-            // Until then, run the expectation
-            loadFeed(1, function() {
-                newFeeds = $('.feed').html();
-                done();
+                // In the callback of loadFeed(0), save feed content to oldFeeds
+                oldFeeds = $('.feed').html();
+
+                // Then clear the feeds again
+                $('.feed').empty();
+
+                // Then fire off loadFeed(1)
+                loadFeed(1, function(){
+
+                    // In the callback of loadFeed(1), save feed content to newFeeds
+                    newFeeds = $('.feed').html();
+
+                    // Finally we have read both old and new feeds
+                    // Now it is time to call done()
+                    done();
+                });
             });
         });
 
-        // Finally run expectation, check if feeds content change
+        // We expect the oldFeeds and newFeeds should be different
         it('should allow content change when a new feed is loaded', function(done) {
             expect(oldFeeds).not.toEqual(newFeeds);
             done();
