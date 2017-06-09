@@ -135,7 +135,7 @@ $(function() {
             loadFeed(1, function() {
                 newFeeds = $('.feed').html();
                 done();
-            })
+            });
         });
 
         // Finally run expectation, check if feeds content change
